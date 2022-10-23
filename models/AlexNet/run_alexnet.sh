@@ -70,11 +70,11 @@ do
     #TODO: make path to caffe less user specific
 
     echo "starting training"
+#/home/becker/caffe/caffe-1.0/build/tools/caffe train -gpu "0" \
 
     C:/Users/trist/Desktop/caffe-windows-installation-tutorial/python/caffe train -gpu "0" \
                                                          -solver="$config/alexnet_solver.prototxt" \
                                                          2>&1 | tee "$config/alexnet_"$task"_split"$splitIdx"_train.log"
-#/home/becker/caffe/caffe-1.0/build/tools/caffe train -gpu "0" \
                                                         -model "$config/alexnet_test.prototxt" \
 #                                                         -solver="$config/alexnet_solver.prototxt" \
 #                                                         2>&1 | tee "$config/alexnet_"$task"_split"$splitIdx"_train.log"

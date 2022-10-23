@@ -4,7 +4,7 @@ task="digit"
 # set paths
 path_cwd=$PWD
 #path_data="/home/becker/repositories/AudioMNIST/data/" #"$path_repo/data_preprocessed/datasets_lmdb" #/foolset"
-path_data="content/AudioMNIST/preprocessed_data/"
+path_data="/content/AudioMNIST/preprocessed_data/"
 timestamp=$(date +"%Y-%m-%d-%T")
 
 
@@ -15,7 +15,7 @@ else
     nSplits=4
 fi
 
-for ((splitIdx=0;splitIdx<$nSplits;splitIdx+=1)); 
+for ((splitIdx=0;splitIdx<$nSplits;splitIdx+=1));
 do
     # create folder for this run
     config=$path_cwd"/runs/"$timestamp"_"$task"_split"$splitIdx
@@ -41,7 +41,7 @@ do
     sed -i "s!<path_to_validation_data>!"$path_hdf5_txt"_validate.txt!g" "$config/alexnet_train.prototxt"
     sed -i "s!<path_to_test_data>!"$path_hdf5_txt"_test.txt!g" "$config/alexnet_test.prototxt"
 
-    
+
     # task dependent adaptations
     if [ "$task" == "digit" ]; then
         nTestIter=60 # validation and test set each contain 12 vps -> 6000 samples
@@ -70,17 +70,17 @@ do
     #TODO: make path to caffe less user specific
 
     echo "starting training"
+#/home/becker/caffe/caffe-1.0/build/tools/caffe train -gpu "0" \
 
-    /content/caffe/caffe-1.0/build/tools/caffe train -gpu "0" \
+    /content/caffe/build/tools/caffe train -gpu "0" \
                                                          -solver="$config/alexnet_solver.prototxt" \
                                                          2>&1 | tee "$config/alexnet_"$task"_split"$splitIdx"_train.log"
-#/home/becker/caffe/caffe-1.0/build/tools/caffe train -gpu "0" \
                                                         -model "$config/alexnet_test.prototxt" \
 #                                                         -solver="$config/alexnet_solver.prototxt" \
 #                                                         2>&1 | tee "$config/alexnet_"$task"_split"$splitIdx"_train.log"
 
     echo "starting testing"
-    /content/caffe/caffe-1.0/build/tools/caffe train -gpu "0" \
+    /content/caffe/build/tools/caffe train -gpu "0" \
                                                         -iterations "$nTestIter" \
                                                         -weights "$config/snapshots/AlexNet_iter_10000.caffemodel" \
                                                         2>&1 | tee "$config/alexnet_"$task"_split_"$splitIdx"_test.log"
