@@ -72,7 +72,7 @@ def _preprocess_data(src_dst_meta):
             to meta file)
     """
 
-
+    print(src_dst_meta)
     src, dst, src_meta = src_dst_meta
 
     print("processing {}".format(src))
@@ -84,7 +84,7 @@ def _preprocess_data(src_dst_meta):
         os.makedirs(dst)
     # loop over recordings
     for filepath in sorted(glob.glob(os.path.join(src, "*.wav"))):
-
+        print(filepath)
         # infer sample info from name
         dig, vp, rep = filepath.rstrip(".wav").split("/")[-1].split("_")
         # read data
@@ -113,6 +113,19 @@ def _preprocess_data(src_dst_meta):
         # convert to decibel
         Zxx = librosa.amplitude_to_db(Zxx, ref = np.max)
         # save as hdf5 file
+        print('dst')
+        print(dst)
+        print('dig')
+        print(dig)
+        print('vp')
+        print(vp)
+        print('rep')
+        print(rep)
+        #dig = digit
+        dig = dig[-1]
+
+        #DIG ici ne prend pas seulement le chiffre car la fct est chelou
+
         with h5py.File(os.path.join(dst, "AlexNet_{}_{}_{}.hdf5".format(dig, vp, rep)), "w") as f:
             tmp_X = np.zeros([1, 1, 227, 227])
 
@@ -216,8 +229,8 @@ def create_splits(src, dst):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--source', '-src', default=os.path.join(os.getcwd(), "data"), help="Path to folder containing each participant's data directory.")
-    parser.add_argument('--destination', '-dst', default=os.path.join(os.getcwd(), "preprocessed_data"), help="Destination where preprocessed data shall be stored.")
+    parser.add_argument('--source', '-src', default=os.path.join(os.getcwd(), "C:\\Users\\trist\\PycharmProjects\\AudioMNIST\\data"), help="Path to folder containing each participant's data directory.")
+    parser.add_argument('--destination', '-dst', default=os.path.join(os.getcwd(), "C:\\Users\\trist\\PycharmProjects\\AudioMNIST\\preprocessed_data"), help="Destination where preprocessed data shall be stored.")
     parser.add_argument('--meta', '-m', default=os.path.join(os.getcwd(), "data", "audioMNIST_meta.txt"), help="Path to meta_information json file.")
 
     args = parser.parse_args()
