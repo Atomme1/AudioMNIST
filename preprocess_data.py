@@ -236,6 +236,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # preprocessing
-    preprocess_data(src=args.source, dst=args.destination, src_meta=args.meta)
+    #preprocess_data(src=args.source, dst=args.destination, src_meta=args.meta)
     # create training, validation and test sets
     create_splits(src=args.destination, dst=args.destination)
