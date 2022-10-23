@@ -113,14 +113,14 @@ def _preprocess_data(src_dst_meta):
         # convert to decibel
         Zxx = librosa.amplitude_to_db(Zxx, ref = np.max)
         # save as hdf5 file
-        print('dst')
-        print(dst)
-        print('dig')
-        print(dig)
-        print('vp')
-        print(vp)
-        print('rep')
-        print(rep)
+        # print('dst')
+        # print(dst)
+        # print('dig')
+        # print(dig)
+        # print('vp')
+        # print(vp)
+        # print('rep')
+        # print(rep)
         #dig = digit
         dig = dig[-1]
 
