@@ -18,7 +18,7 @@ from keras.optimizers import SGD
 import keras
 import keras.utils
 from keras import utils as np_utils
-
+#yo
 # from tensorflow.keras.utils import to_categorical
 
 cnn_model = Sequential()
