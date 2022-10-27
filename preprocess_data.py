@@ -72,7 +72,7 @@ def _preprocess_data(src_dst_meta):
             to meta file)
     """
 
-
+    print(src_dst_meta)
     src, dst, src_meta = src_dst_meta
 
     print("processing {}".format(src))
@@ -84,7 +84,7 @@ def _preprocess_data(src_dst_meta):
         os.makedirs(dst)
     # loop over recordings
     for filepath in sorted(glob.glob(os.path.join(src, "*.wav"))):
-
+        print(filepath)
         # infer sample info from name
         dig, vp, rep = filepath.rstrip(".wav").split("/")[-1].split("_")
         # read data
@@ -113,6 +113,19 @@ def _preprocess_data(src_dst_meta):
         # convert to decibel
         Zxx = librosa.amplitude_to_db(Zxx, ref = np.max)
         # save as hdf5 file
+        # print('dst')
+        # print(dst)
+        # print('dig')
+        # print(dig)
+        # print('vp')
+        # print(vp)
+        # print('rep')
+        # print(rep)
+        #dig = digit
+        dig = dig[-1]
+
+        #DIG ici ne prend pas seulement le chiffre car la fct est chelou
+
         with h5py.File(os.path.join(dst, "AlexNet_{}_{}_{}.hdf5".format(dig, vp, rep)), "w") as f:
             tmp_X = np.zeros([1, 1, 227, 227])
 
@@ -223,6 +236,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # preprocessing
-    preprocess_data(src=args.source, dst=args.destination, src_meta=args.meta)
+    #preprocess_data(src=args.source, dst=args.destination, src_meta=args.meta)
     # create training, validation and test sets
     create_splits(src=args.destination, dst=args.destination)
