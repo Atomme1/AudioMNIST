@@ -12,3 +12,5 @@ recording_scripts/*.checkpoint*
 
 # preprocessed data
 preprocessed_data/
+
+venv/
