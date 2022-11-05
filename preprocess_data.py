@@ -72,10 +72,7 @@ def _preprocess_data(src_dst_meta):
             to meta file)
     """
 
-    print(src_dst_meta)
     src, dst, src_meta = src_dst_meta
-
-    print("processing {}".format(src))
 
     metaData = json.load(open(src_meta))
 
