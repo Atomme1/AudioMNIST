@@ -70,7 +70,7 @@ cnn_model = build_model()
 cnn_model.summary()
 
 # Compile the cnn_model
-cnn_model.compile(loss=keras.losses.categorical_crossentropy, optimizer=optimizers.Adam(learning_rate=0.0005),
+cnn_model.compile(loss=keras.losses.categorical_crossentropy, optimizer=optimizers.Adam(learning_rate=0.0001),
                   metrics=["accuracy"])
 
 print("after compile")
@@ -85,9 +85,9 @@ with open('C:\\Users\\trist\\PycharmProjects\\AudioMNIST\\preprocessed_data\\Ale
     contents = f.readlines()
     # print(contents)
     for line in contents:
-        f = h5py.File(line.strip(), 'r')
-        train_data.append(f['data'][...])
-        train_label.append(f['label'][...])
+        h5f = h5py.File(line, 'r')
+        train_data.append(h5f['data'][...])
+        train_label.append(h5f['label'][...])
         # print(train_data)
 
 #print(train_data)
@@ -96,9 +96,9 @@ with open('C:\\Users\\trist\\PycharmProjects\\AudioMNIST\\preprocessed_data\\Ale
     contents = f.readlines()
     # print(contents)
     for line in contents:
-        f = h5py.File(line.strip(), 'r')
-        test_data.append(f['data'][...])
-        test_label.append(f['label'][...])
+        h5f = h5py.File(line, 'r')
+        test_data.append(h5f['data'][...])
+        test_label.append(h5f['label'][...])
 
 
 # print(train_data)
