@@ -33,22 +33,30 @@ def build_model():
 
     model.add(layers.Conv2D(64, kernel_size=(1, 3), activation='relu', padding='valid', name='conv2'))
 
-    model.add(layers.MaxPooling2D(pool_size=3, strides=2, name='pool2'))
+    model.add(layers.MaxPooling2D(pool_size=(1, 2), strides=2, name='pool2'))
 
-    model.add(layers.Conv2D(384, kernel_size=(3, 3), activation='relu', padding='valid', name='conv3'))
+    model.add(layers.Conv2D(128, kernel_size=(1, 3), strides=(1, 1), activation='relu', padding='valid', name='conv3'))
 
-    model.add(layers.Conv2D(384, kernel_size=(3, 3), activation='relu', padding='valid', name='conv4'))
+    model.add(layers.MaxPooling2D(pool_size=(1, 2), strides=2, name='pool3'))
 
-    model.add(layers.Conv2D(256, kernel_size=(3, 3), activation='relu', padding='valid', name='conv5'))
+    model.add(layers.Conv2D(128, kernel_size=(1, 3), strides=(1, 1), activation='relu', padding='valid', name='conv4'))
 
-    model.add(layers.MaxPooling2D(pool_size=3, strides=2, name='pool5'))
+    model.add(layers.MaxPooling2D(pool_size=(1, 2), strides=2, name='pool4'))
 
-    model.add(layers.Flatten())
-    model.add(layers.Dense(1024, name='fc6', activation='relu'))
-    model.add(layers.Dropout(0.5, name="drop6"))
-    model.add(layers.Dense(1024, name='fc7', activation='relu'))
+    model.add(layers.Conv2D(128, kernel_size=(1, 3), strides=(1, 1), activation='relu', padding='valid', name='conv5'))
+
+    model.add(layers.MaxPooling2D(pool_size=(1, 2), strides=2, name='pool5'))
+
+    model.add(layers.Conv2D(128, kernel_size=(1, 3), strides=(1, 1), activation='relu', padding='valid', name='conv6'))
+
+    model.add(layers.MaxPooling2D(pool_size=(1, 2), strides=2, name='pool6'))
+
+    #model.add(layers.Flatten())
+    model.add(layers.Dense(1024, name='fc7'))
     model.add(layers.Dropout(0.5, name="drop7"))
-    model.add(layers.Dense(10, name='fc8', activation='softmax'))
+    model.add(layers.Dense(512, name='fc8'))
+    model.add(layers.Dropout(0.5, name="drop8"))
+    model.add(layers.Dense(512, name='fc9'))
 
     return model
 
