@@ -16,7 +16,7 @@ from keras.optimizers import Adam
 from keras.losses import sparse_categorical_crossentropy
 
 INPUT_DIR = os.path.join(os.getcwd(), "data")
-OUTPUT_DIR = os.path.join(os.getcwd(), "spectro")
+OUTPUT_DIR = os.path.join(os.getcwd(), "wave")
 print(INPUT_DIR)
 
 folders = []
@@ -35,6 +35,7 @@ parent_list = []
 for i in range(60):
     parent_list.append(os.listdir(path[i]))
 print(parent_list)
+
 
 IMAGE_HEIGHT = 227
 IMAGE_WIDTH = 227
@@ -80,6 +81,62 @@ def prepare(ds, augment=False):
 train_dataset = prepare(train_dataset, augment=False)
 valid_dataset = prepare(valid_dataset, augment=False)
 
+
+
+
+#AudioNet
+def build_model():
+    model = tf.keras.Sequential()
+    model.add(layers.Conv2D(100, kernel_size=(1, 3), input_shape=(227, 227, 3), strides=(1, 1), activation='relu',
+                            padding='valid', name='conv1'))
+
+    model.add(layers.MaxPooling2D(pool_size=(1, 3), strides=2, name='pool1'))
+
+    model.add(layers.Conv2D(64, kernel_size=(1, 3), activation='relu', padding='valid', name='conv2'))
+
+    model.add(layers.MaxPooling2D(pool_size=(1, 2), strides=2, name='pool2'))
+
+    model.add(layers.Conv2D(128, kernel_size=(1, 3), strides=(1, 1), activation='relu', padding='valid', name='conv3'))
+
+    model.add(layers.MaxPooling2D(pool_size=(1, 2), strides=2, name='pool3'))
+
+    model.add(layers.Conv2D(128, kernel_size=(1, 3), strides=(1, 1), activation='relu', padding='valid', name='conv4'))
+
+    model.add(layers.MaxPooling2D(pool_size=(1, 2), strides=2, name='pool4'))
+
+    model.add(layers.Conv2D(128, kernel_size=(1, 3), strides=(1, 1), activation='relu', padding='valid', name='conv5'))
+
+    model.add(layers.MaxPooling2D(pool_size=(1, 2), strides=2, name='pool5'))
+
+    model.add(layers.Conv2D(128, kernel_size=(1, 3), strides=(1, 1), activation='relu', padding='valid', name='conv6'))
+
+    model.add(layers.MaxPooling2D(pool_size=(1, 2), strides=2, name='pool6'))
+
+    #model.add(layers.Flatten())
+    model.add(layers.Dense(1024, name='fc7'))
+    model.add(layers.Dropout(0.5, name="drop7"))
+    model.add(layers.Dense(512, name='fc8'))
+    model.add(layers.Dropout(0.5, name="drop8"))
+    model.add(layers.Dense(512, name='fc9'))
+
+    return model
+
+
+cnn_model = build_model()
+cnn_model.summary()
+
+# Compile the cnn_model
+cnn_model.compile(loss=keras.losses.categorical_crossentropy, optimizer=optimizers.Adam(learning_rate=0.0001),
+                  metrics=["accuracy"])
+history = cnn_model.fit(train_dataset, validation_data=valid_dataset)
+
+
+final_loss, final_acc = cnn_model.evaluate(valid_dataset, verbose=0)
+print("Final loss: {0:.6f}, final accuracy: {1:.6f}".format(final_loss, final_acc))
+
+
+"""
+#AlexNet
 def build_model():
     model = tf.keras.Sequential()
     model.add(layers.Conv2D(96, kernel_size=(11, 11), input_shape=(227, 227, 3), strides=(4, 4), activation='relu',
@@ -117,7 +174,7 @@ history = cnn_model.fit(train_dataset, validation_data=valid_dataset)
 
 final_loss, final_acc = cnn_model.evaluate(valid_dataset, verbose=0)
 print("Final loss: {0:.6f}, final accuracy: {1:.6f}".format(final_loss, final_acc))
-
+"""
 
 """
 def get_wav_info(wav_file):
@@ -133,7 +190,7 @@ if not os.path.exists(OUTPUT_DIR):
 
 for pat in path:
     for filename in os.listdir(pat):
-        print(filename)
+        #print(filename)
         if "wav" in filename:
             file_path = os.path.join(pat, filename)
             file_stem = Path(file_path).stem
@@ -145,7 +202,8 @@ for pat in path:
                     os.mkdir(dist_dir)
                 file_stem = Path(file_path).stem
                 sound_info, frame_rate = get_wav_info(file_path)
-                pylab.specgram(sound_info, Fs=frame_rate)
+                pylab.plot(sound_info)
+                #pylab.specgram(sound_info, Fs=frame_rate)
                 pylab.savefig(f'{file_dist_path}.png')
                 pylab.close()
 """
