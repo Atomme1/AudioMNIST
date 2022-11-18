@@ -200,4 +200,5 @@ model_fit(f, input_train, label_train)
 score = f.evaluate(input_test, label_test, verbose=0)
 print(f'Test loss: {score[0]} / Test accuracy: {score[1]}')
 
+
 #300 s per epoch
