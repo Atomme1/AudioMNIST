@@ -30,7 +30,7 @@ def run(noMic, noTest, auto_cut):
                 'channels'      :  1,\
                 'seconds'       :  1,\
                 'pause'         :  1,\
-                'device_name'   :  "RODE*", \
+                'device_name'   :  "Microsoft Sound Mapper - Input*", \
                 'device_index'  : -1,\
                 'recording_log' : './session_log.txt',\
                 'data_folder'   : './data',\
@@ -57,10 +57,10 @@ def run(noMic, noTest, auto_cut):
     SAMPLES = [(SAMPLES[i],REPETITION[i]) for i in I] # [(digit, rep)* ]
 
     #Initialize subject dummy
-    SUBJECT = { 'alias'         : "johndoe",\
-                'age'           : 1234,\
-                'origin'        : "Europe, Germany, Berlin",\
-                'accent'        : "German",\
+    SUBJECT = { 'alias'         : "norbert",\
+                'age'           : 22,\
+                'origin'        : "Europe, France, Paris",\
+                'accent'        : "French",\
                 'native speaker': ['no', 'yes'], \
                 'gender'        : ['male', 'female', 'other'],\
                 'recordingroom' : "<enter place where recording was made>",\
@@ -76,7 +76,7 @@ def run(noMic, noTest, auto_cut):
     if not os.path.exists(SETTINGS["meta_file"]):
         with open(SETTINGS["meta_file"], "w+") as mf:
             mf.write("{}\n")
-
+    
     #start session
     util.start_recording_session(SUBJECT, SETTINGS, SAMPLES, noMic, noTest, auto_cut)
 
@@ -103,7 +103,7 @@ if __name__ == '__main__':
                              "Therefore it is turned off by default.)")
     
     parser.set_defaults(noMic=False)
-    parser.set_defaults(noTest=False)
+    parser.set_defaults(noTest=True)
     args = parser.parse_args()
 
     run(args.noMic, args.noTest, args.auto_cut)

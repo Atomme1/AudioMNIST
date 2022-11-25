@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
 import recording_gui as rgui
 
 # ------------------
@@ -42,6 +43,9 @@ def start_recording_session(SUBJECT, SETTINGS, SAMPLES, noMic, noTest, auto_cut)
             print('User cancelled.')
             quit()
     metadata = read_meta(SETTINGS)
+    
+    print('\n\n\n METADATA :\n\n {}\n\n\n')
+    
     activeSubject = read_checkpoint()
 
     if activeSubject and rgui.SubjectMessageScreen('Found an active session. Continue?').show():    
@@ -51,9 +55,9 @@ def start_recording_session(SUBJECT, SETTINGS, SAMPLES, noMic, noTest, auto_cut)
     else:
 
         print('new session.')
-        SUBJECT['alias'] = 'tmp_'+str(datetime.datetime.now().strftime("%d-%m-%y-%H-%M-%s"))
+        SUBJECT['alias'] = 'tmp_'+str(datetime.datetime.now().strftime("%d-%m-%y-%H-%M-%S"))
         while is_subject_in_metadata(SUBJECT, metadata) != False: # in case tmp_str(time.time()) is for some reason already in the data
-            SUBJECT['alias'] = 'tmp_'+str(datetime.datetime.now().strftime("%d-%m-%y-%H-%M-%s"))
+            SUBJECT['alias'] = 'tmp_'+str(datetime.datetime.now().strftime("%d-%m-%y-%H-%M-%S"))
         
         if activeSubject: # in case there is a checkpoint but that session shell not be continued.
             disable_checkpoint()
@@ -101,7 +105,7 @@ def start_recording_session(SUBJECT, SETTINGS, SAMPLES, noMic, noTest, auto_cut)
             SUBJECT = SUBJECT_dialog.copy()
             subjectDataScreen = rgui.SubjectDataScreen(SUBJECT)
         
-        SUBJECT = {k: unicode(v).encode("utf-8") for k,v in SUBJECT.iteritems()}
+        SUBJECT = {str(k): v for k,v in SUBJECT.items()}
 
         SUBJECT['alias'] = subject_filename_convention(SUBJECT['alias'])
         # ask for subject status
@@ -109,7 +113,7 @@ def start_recording_session(SUBJECT, SETTINGS, SAMPLES, noMic, noTest, auto_cut)
 
         if subject_in_meta == False: # totally new subject. continue as is. you are fine.
             # add subject data to meta file
-            add_to_meta(metadata, SUBJECT)
+            add_to_meta(metadata, SUBJECT, SETTINGS)
             write_meta(metadata, SETTINGS)
             update_subject_filenames(subjectFileIdentifier, SUBJECT['alias'], SETTINGS)
             session_initialized = True
@@ -133,17 +137,17 @@ def find_input_device(namingpattern='*'):
     device_index = -1
     devices = sd.query_devices()
 
-    for i in xrange(len(devices)):
-        print devices[i]['name'], devices[i]['max_input_channels']
+    for i in range(len(devices)):
+        print (devices[i]['name'], devices[i]['max_input_channels'])
 
         if devices[i]['max_input_channels'] > 0 and fnmatch.fnmatch(devices[i]['name'],namingpattern):
-            print '\nfound at least one matching device!'
-            print 'selecting at index',i,':', devices[i]['name'],'(this is the first pick)'
+            print ('\nfound at least one matching device!')
+            print ('selecting at index',i,':', devices[i]['name'],'(this is the first pick)')
             device_index = i
             break
 
     if device_index < 0:
-        print 'WARNING! No suitable sound device found!'
+        print ('WARNING! No suitable sound device found!')
     return device_index
 
 
@@ -154,14 +158,14 @@ def find_input_device(namingpattern='*'):
 
 def read_meta(SETTINGS):
     #reads the metadata json dictionary from disk.
-    print 'reading metadata from', SETTINGS['meta_file']
-    with open(SETTINGS['meta_file'],'rb') as f:
+    print ('reading metadata from', SETTINGS['meta_file'])
+    with open(SETTINGS['meta_file'],'r', encoding='utf-8') as f:
         metadata = json.loads(f.read())
         return metadata
 
 
 
-def add_to_meta(metadata, SUBJECT):
+def add_to_meta(metadata, SUBJECT, SETTINGS):
     #raises exception
     #adds the data of SUBJECT to the metadata file, returns the extended data
     if SUBJECT['alias'] in metadata: #safety catch
@@ -176,9 +180,9 @@ def add_to_meta(metadata, SUBJECT):
 
 def write_meta(metadata,SETTINGS):
     #writes the given metadata dictionary to the file name specified in SETTINGS
-
-    with open(SETTINGS['meta_file'],'wb') as f:
-        f.write(json.dumps(metadata, sort_keys=True, indent=4))
+    print('TYPE : {}'.format(metadata))
+    with open(SETTINGS['meta_file'],'w',encoding='utf-8') as f:
+        json.dump(metadata, f,sort_keys=True, ensure_ascii=False, indent=4)
 
 
 # ------------------------
@@ -296,10 +300,10 @@ def update_subject_filenames(originalName, newName, SETTINGS):
     for line in fileinput.input(path, inplace = True):
         if originalName in line:
             newLine = line.replace(originalName, newName)
-            print "%s" % (newLine),
+            print ("%s" % (newLine),)
             logCounter += 1
         else:
-            print "%s" % (line),
+            print ("%s" % (line),)
 
     print('Updated {:d} lines in logfile.'.format(logCounter))
     if not dataCounter == logCounter:
@@ -332,8 +336,8 @@ def remove_recordings(filesToRemove, SETTINGS):
 def read_checkpoint(path = './activeRecording.checkpoint'):
     # returns content of '../activeRecording.checkpoint' if that file exists and None otherwise
     if os.path.exists(path):
-        print 'found an active session'
-        with open(path,'rb') as f:
+        print ('found an active session')
+        with open(path,'r', encoding='utf-8') as f:
             return json.loads(f.read())
     else:
         return None
@@ -341,8 +345,8 @@ def read_checkpoint(path = './activeRecording.checkpoint'):
 
 def write_checkpoint(subject, path = './activeRecording.checkpoint'):
     # creates a checkpoint file that contains the data in subject (where subject should be a dictionary)
-    with open(path,'wb') as f:
-        f.write(json.dumps(subject, sort_keys=True, indent=4))
+    with open(path,'w', encoding='utf-8') as f:
+        json.dump(subject, f, sort_keys=True, indent=4)
 
 
 def remove_checkpoint(path = './activeRecording.checkpoint'):
@@ -351,7 +355,7 @@ def remove_checkpoint(path = './activeRecording.checkpoint'):
 
 def disable_checkpoint(path = './activeRecording.checkpoint'):
     if os.path.exists(path):
-        with open(path,'rb') as f:
+        with open(path,'r', encoding='utf-8') as f:
             sess_id = json.loads(f.read())['alias']
         os.rename(path, path.replace('active', 'inactive')+'_'+sess_id)
         print('existing checkpoint disabled')
@@ -364,19 +368,19 @@ def disable_checkpoint(path = './activeRecording.checkpoint'):
 def add_to_log(SETTINGS, wavpath):
     logpath = SETTINGS['recording_log']
     if not os.path.isfile(logpath):
-        with open(logpath, 'wb') as f:
+        with open(logpath, 'w', encoding='utf-8') as f:
             f.write(wavpath + '\n')
     else:
-        with open(logpath,'ab') as f:
+        with open(logpath,'a', encoding='utf-8') as f:
             f.write(wavpath + '\n')
 
 def log_to_list(SETTINGS):
     logpath = SETTINGS['recording_log']
     if not os.path.isfile(logpath):
-        print 'no log file found at', logpath
+        print ('no log file found at', logpath)
         return []
     else:
-        with open(logpath,'rb') as f:
+        with open(logpath,'r', encoding='utf-8') as f:
             return f.read().split()
 
 

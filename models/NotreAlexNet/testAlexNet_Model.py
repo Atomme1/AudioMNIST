@@ -159,6 +159,7 @@ def extract(path_txt_file):
             label.append(f['label'][...])
         data = np.array(data).reshape(len(data),img_width, img_height, img_num_channels)
         label = np.array(label).reshape(len(label),2)
+    f.close()
     return data, label
        
 

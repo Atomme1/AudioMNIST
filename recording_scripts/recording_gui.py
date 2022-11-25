@@ -445,6 +445,7 @@ class DataRecordingScreen():
                 # start new record
                 recording = np.zeros((nAudioSamples, self.SETTINGS['channels']), dtype=np.int16)
                 if not noMic:
+                    print(self.SETTINGS)
                     sd.rec(nAudioSamples,
                         samplerate=self.SETTINGS['samplerate'],
                         channels=self.SETTINGS['channels'],

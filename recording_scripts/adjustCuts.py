@@ -109,6 +109,8 @@ def run(src, dst):
 
     filenames = glob.glob(os.path.join(src, "*.wav"))
 
+    print(filenames)
+
     for fileIdx, filename in enumerate(filenames):
 
         # infer digits and repetition from file name convention
@@ -120,7 +122,8 @@ def run(src, dst):
         y = butter_bandpass_filter(thisData, lowcut, highcut, thisFs, order=7)
         y = y / np.percentile(abs(y), 99)
 
-        rolledMean = pd.rolling_max(arg = abs(y), window=int(1*4800), center = True)
+        #rolledMean = pd.rolling_max(arg = abs(y), window=int(1*4800), center = True)
+        rolledMean = pd.DataFrame(abs(y)).rolling(window=int(1*4800), center = True).max()
         rolledMean[np.isnan(rolledMean)] = 0
         idcs = np.where(rolledMean > 0.1)[0]
         stopIdcs = np.concatenate([idcs[np.where(np.diff(idcs) > 1)[0]], [idcs[-1]]])
@@ -217,7 +220,7 @@ def run(src, dst):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-src', default=".", help='Source directory where recorded autio series are stored.')
+    parser.add_argument('-src', default="./data", help='Source directory where recorded autio series are stored.')
     parser.add_argument('-dst', default="./cut", help='Destination directory where to store cut audio files.')
     args = parser.parse_args()
 
