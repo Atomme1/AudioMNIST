@@ -103,7 +103,7 @@ if __name__ == '__main__':
                              "Therefore it is turned off by default.)")
     
     parser.set_defaults(noMic=False)
-    parser.set_defaults(noTest=True)
+    parser.set_defaults(noTest=False)
     args = parser.parse_args()
 
     run(args.noMic, args.noTest, args.auto_cut)
