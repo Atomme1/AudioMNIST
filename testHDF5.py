@@ -4,6 +4,22 @@ from keras.models import Sequential
 from keras.layers import Dense, Flatten, Conv2D
 from keras.losses import sparse_categorical_crossentropy
 from keras.optimizers import Adam
+import deepdish as dd
+import tensorflow as tf
+
+def _bytes_feature(value):
+    """Returns a bytes_list from a string / byte."""
+    return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
+
+
+def _float_feature(value):
+    """Returns a float_list from a float / double."""
+    return tf.train.Feature(float_list=tf.train.FloatList(value=[value]))
+
+
+def _int64_feature(value):
+    """Returns an int64_list from a bool / enum / int / uint."""
+    return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
 
 # Model configuration
 batch_size = 50
@@ -19,8 +35,8 @@ train_data=[]
 train_label=[]
 # Load MNIST data
 f = h5py.File("C://Users//trist//PycharmProjects//AudioMNIST//preprocessed_data//01//AlexNet_0_01_0.hdf5", 'r')
-train_data.append(f['data'][...])
-train_label.append(f['label'][...])
+train_data.append(f['data'])
+train_label.append(f['label'])
 
 f = h5py.File("C://Users//trist//PycharmProjects//AudioMNIST//preprocessed_data//01//AlexNet_0_01_1.hdf5", 'r')
 train_data.append(f['data'][...])
@@ -35,7 +51,8 @@ f = h5py.File("C://Users//trist//PycharmProjects//AudioMNIST//preprocessed_data/
 train_data.append(f['data'][...])
 train_label.append(f['label'][...])
 
-print(train_data[0:1])
+print(train_data[0])
+print(train_label[0])
 
 ##tree test
 print("tree test")
@@ -61,6 +78,12 @@ def h5_tree(val, pre=''):
 with h5py.File("C://Users//trist//PycharmProjects//AudioMNIST//preprocessed_data//01//AlexNet_0_01_0.hdf5", 'r') as hf:
     print(hf)
     h5_tree(hf)
+
+mydata = dd.io.load("C://Users//trist//PycharmProjects//AudioMNIST//preprocessed_data//01//AlexNet_0_01_3.hdf5")
+print(mydata.keys())
+# print(mydata['data'][0], type(_float_feature(mydata['data'][0])))
+print("len(f)")
+print(f['data'][...])
 
 f.close()
 f = h5py.File("C://Users//trist//PycharmProjects//AudioMNIST//preprocessed_data//01//AlexNet_0_01_1.hdf5", 'r')
