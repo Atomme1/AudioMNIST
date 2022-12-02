@@ -29,7 +29,7 @@ h5py~=3.7.0
 # recording_scripts/recording_gui.py: 5
 # recording_scripts/util.py: 11,12
 scipy~=1.9.3
-
+ipynb
 # recording_scripts/main.py: 3
 # recording_scripts/recording_gui.py: 2
 # recording_scripts/util.py: 2
