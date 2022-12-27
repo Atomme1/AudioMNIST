@@ -29,7 +29,6 @@ def save_text():
     text_file.write(my_text_box.get(1.0, END))
     text_file.close()
 
-
 # Create an instance of tkinter window with a frame
 win = Tk()
 win.title("Txt and WAV generator for easy data recording and labeling")
