@@ -14,3 +14,38 @@ recording_scripts/*.checkpoint*
 preprocessed_data/*
 Open_SLR_data/*
 venv/*
+/.idea/.gitignore
+/.idea/AudioMNIST.iml
+/logs/train/events.out.tfevents.1670601915.DESKTOP-D177035.23204.0.v2
+/logs/validation/events.out.tfevents.1670606593.DESKTOP-D177035.23204.1.v2
+/logs/train/events.out.tfevents.1670660513.DESKTOP-D177035.14120.0.v2
+/logs/train/events.out.tfevents.1670661452.DESKTOP-D177035.19276.0.v2
+/logs/train/events.out.tfevents.1670708966.DESKTOP-D177035.22132.0.v2
+/logs/train/events.out.tfevents.1670715030.DESKTOP-D177035.22332.0.v2
+/logs/train/events.out.tfevents.1670715067.DESKTOP-D177035.22332.1.v2
+/logs/train/events.out.tfevents.1670715103.DESKTOP-D177035.17684.0.v2
+/logs/train/events.out.tfevents.1670715488.DESKTOP-D177035.8168.0.v2
+/logs_all_v2/train/events.out.tfevents.1670753023.DESKTOP-D177035.18596.0.v2
+/logs_all_v2/train/events.out.tfevents.1670753193.DESKTOP-D177035.7552.0.v2
+/logs_all_v2/validation/events.out.tfevents.1670756984.DESKTOP-D177035.7552.1.v2
+/logs_all_v2/train/events.out.tfevents.1670831236.DESKTOP-D177035.18828.0.v2
+/logs_100_epochs/train/events.out.tfevents.1671048109.DESKTOP-D177035.7544.0.v2
+/logs_100_epochs/validation/events.out.tfevents.1671051854.DESKTOP-D177035.7544.1.v2
+/logs_100_epochs/train/events.out.tfevents.1671376873.DESKTOP-D177035.6468.0.v2
+/logs_51_epochs/train/events.out.tfevents.1671531564.DESKTOP-D177035.8956.0.v2
+/logs_51_epochs/validation/events.out.tfevents.1671535217.DESKTOP-D177035.8956.1.v2
+/.idea/misc.xml
+/Saved_Model_OPEN_SLR/model_100_epochs.hdf5
+/Saved_Model_OPEN_SLR/model_all.hdf5
+/Saved_Model_OPEN_SLR/model_tensor.hdf5
+/.idea/modules.xml
+/Saved_Model_OPEN_SLR/my_best_model.hdf5
+/.idea/other.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/data_from_recordings/tristan_oui .txt
+/data_from_recordings/tristan_oui .wav
+/data_from_recordings/tristan_oui_4 .txt
+/tristan_oui_4 .txt
+/data_from_recordings/tristan_oui_4 .wav
+/.idea/vcs.xml
+/Saved_Model_OPEN_SLR/model_51_epochs.hdf5
